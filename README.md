@@ -16,3 +16,6 @@
 
 ### monitoring
 * prometheus grafana 구축 환경 입니다
+
+### mysql
+* mysql DB 구축 환경 입니다
