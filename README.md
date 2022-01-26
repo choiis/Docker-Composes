@@ -12,7 +12,7 @@
 * Jaeger collector query agent ingester Kafka Cassandra 구축 환경 입니다
 
 ### kafka
-* kafka zookeeper 구축 환경 입니다
+* kafka zookeeper kafka_ui 구축 환경 입니다
 
 ### monitoring
 * prometheus grafana 구축 환경 입니다
