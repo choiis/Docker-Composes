@@ -1,0 +1,152 @@
+version: '3.3'
+networks:
+  msa-cortex:
+services:
+  chunk_cassandra:
+    image: cassandra:3.11.6 
+    restart: always
+    ports:
+      - "9042:9042"
+      - "7000:7000"
+    networks:
+      - msa-cortex
+  cortex_table_manager:
+    image: ubuntu/cortex:1.10-21.10_beta   
+    restart: on-failure
+    ports:
+      - "8380:8380"
+      - "9160:9160"
+    volumes: 
+      - "./cortex.yml:/etc/cortex.yml"
+    command: "-target=table-manager 
+            -config.file=/etc/cortex.yml 
+            -server.http-listen-port=8380 
+            -server.grpc-listen-port=9160"
+    networks:
+      - msa-cortex
+    depends_on:
+        - chunk_cassandra
+  cortex_distributor:
+    image: ubuntu/cortex:1.10-21.10_beta   
+    restart: on-failure
+    ports:
+      - "8800:8800"
+      - "9140:9140"
+    volumes: 
+      - "./cortex.yml:/etc/cortex.yml"
+    command: "-target=distributor 
+            -config.file=/etc/cortex.yml 
+            -server.http-listen-port=8800 
+            -server.grpc-listen-port=9140"
+    networks:
+      - msa-cortex
+  cortex_ingester-1:
+    image: ubuntu/cortex:1.10-21.10_beta   
+    restart: on-failure
+    ports:
+      - "13100:13100"
+      - "19001:19001"
+      - "21010:21010"
+    volumes: 
+      - "./cortex.yml:/etc/cortex.yml"
+    command: "-target=ingester 
+            -config.file=/etc/cortex.yml 
+            -server.http-listen-port=13100 
+            -server.grpc-listen-port=19001
+            -memberlist.bind-port=21010"
+    networks:
+      - msa-cortex
+    depends_on:
+        - cortex_distributor
+        - cortex_table_manager
+  cortex_ingester-2:
+    image: ubuntu/cortex:1.10-21.10_beta   
+    restart: on-failure
+    ports:
+      - "13200:13200"
+      - "19002:19002"
+      - "21020:21020"
+    volumes: 
+      - "./cortex.yml:/etc/cortex.yml"
+    command: "-target=ingester 
+            -config.file=/etc/cortex.yml 
+            -server.http-listen-port=13200 
+            -server.grpc-listen-port=19002
+            -memberlist.bind-port=21020"
+    networks:
+      - msa-cortex
+    depends_on:
+        - cortex_distributor
+        - cortex_table_manager
+  cortex_ingester-3:
+    image: ubuntu/cortex:1.10-21.10_beta   
+    restart: on-failure
+    ports:
+      - "13300:13300"
+      - "19003:19003"
+      - "21030:21030"
+    volumes: 
+      - "./cortex.yml:/etc/cortex.yml"
+    command: "-target=ingester 
+            -config.file=/etc/cortex.yml 
+            -server.http-listen-port=13300 
+            -server.grpc-listen-port=19003
+            -memberlist.bind-port=21030"
+    networks:
+      - msa-cortex
+    depends_on:
+        - cortex_distributor
+        - cortex_table_manager
+  cortex_frontend:
+    image: ubuntu/cortex:1.10-21.10_beta   
+    restart: on-failure
+    ports:
+      - "8880:8880"
+      - "9150:9150"
+    volumes: 
+      - "./cortex.yml:/etc/cortex.yml"
+    command: "-target=query-frontend 
+            -config.file=/etc/cortex.yml 
+            -server.http-listen-port=8880 
+            -server.grpc-listen-port=9150"
+    networks:
+      - msa-cortex
+    depends_on:
+        - cortex_table_manager
+        - chunk_cassandra
+  cortex_querier-1:
+    image: ubuntu/cortex:1.10-21.10_beta   
+    restart: on-failure
+    ports:
+      - "11221:11221"
+      - "9291:9291"
+    volumes: 
+      - "./cortex.yml:/etc/cortex.yml"
+    command: "-target=querier
+            -config.file=/etc/cortex.yml 
+            -server.http-listen-port=11221 
+            -server.grpc-listen-port=9291"
+    networks:
+      - msa-cortex
+    depends_on:
+        - cortex_table_manager
+        - chunk_cassandra
+        - cortex_frontend
+  cortex_querier-2:
+    image: ubuntu/cortex:1.10-21.10_beta   
+    restart: on-failure
+    ports:
+      - "11222:11222"
+      - "9292:9292"
+    volumes: 
+      - "./cortex.yml:/etc/cortex.yml"
+    command: "-target=querier
+            -config.file=/etc/cortex.yml 
+            -server.http-listen-port=11222 
+            -server.grpc-listen-port=9292"
+    networks:
+      - msa-cortex
+    depends_on:
+        - cortex_table_manager
+        - chunk_cassandra
+        - cortex_frontend

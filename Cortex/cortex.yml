@@ -1,0 +1,104 @@
+target: distributor
+auth_enabled: true
+
+distributor:
+  ha_tracker:
+    enable_ha_tracker: false
+  pool:
+    health_check_ingesters: true
+    client_cleanup_period: "15s"
+  shard_by_all_labels: true
+  extend_writes: 
+  ring:
+    kvstore:
+      store: memberlist
+      
+ingester:
+  max_chunk_age: "4h"
+  lifecycler:
+    num_tokens: 128
+    tokens_file_path: "tokens"
+    join_after: "10s"
+    observe_period: "10s"
+    final_sleep: "5s"
+    interface_names:
+      - "eth0"
+      - "eth1"
+    unregister_on_shutdown: false
+    ring:
+      kvstore:
+        store: memberlist
+      replication_factor: 2
+  walconfig:
+    wal_enabled: true
+    checkpoint_enabled: true
+    recover_from_wal: true
+    wal_dir: "wal"
+    flush_on_shutdown_with_wal_enabled: false
+
+memberlist:
+  bind_addr:
+    - "0.0.0.0"
+  bind_port: 21010
+  join_members: [cortex_ingester-1:21010,cortex_ingester-2:21020,cortex_ingester-3:21030]
+  rejoin_interval: "5m"
+  pull_push_interval: "10s"
+
+api:
+  prometheus_http_prefix: /api/prom
+  response_compression_enabled: true
+
+schema:
+  configs:
+    - from: "2022-01-01"
+      object_store: "cassandra"
+      store: "cassandra"
+      schema: "v1"
+      chunks:
+        period: "1w"
+        prefix: "chk_v1_1w_"
+      index:
+        period: "1w"
+        prefix: "idx_v1_1w_"
+    - from: "2022-02-01"
+      object_store: "cassandra"
+      store: "cassandra"
+      schema: "v2"
+      chunks:
+        period: "1w"
+        prefix: "chk_v2_1w_"
+      index:
+        period: "1w"
+        prefix: "idx_v2_1w_"
+
+storage:
+  engine: "chunks"
+  cassandra:
+    addresses: chunk_cassandra
+    port: 9042
+    keyspace: "docker_cortex"
+    consistency: "ONE"
+    num_connections: 5
+    query_concurrency: 100
+    disable_initial_host_lookup: true
+    table_options: "compaction = {'class': 'TimeWindowCompactionStrategy', 'compaction_window_size': '14', 'compaction_window_unit': 'DAYS'}"
+
+frontend_worker:
+  frontend_address: cortex_frontend:9150
+  match_max_concurrent: true
+
+querier:
+  max_concurrent: 100
+
+frontend:
+  log_queries_longer_than: "3s"
+
+query_range:
+  cache_results: false
+
+table_manager:
+  throughput_updates_disabled: true
+  retention_deletes_enabled: true
+  retention_period: "8w"
+
+

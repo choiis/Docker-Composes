@@ -1,8 +1,6 @@
-version: "3"
+version: "3.3"
 
 services:
-
-  # Using ElasticSearch as a storage for traces and logs
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.7.1
     networks:
@@ -13,23 +11,21 @@ services:
     restart: on-failure
     environment:
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
-
+      TZ: Asia/Seoul
   logstash:
     image: docker.elastic.co/logstash/logstash-oss:6.7.1
     ports:
       - "5000:5000"
+    environment:
+      TZ: Asia/Seoul
     networks:
       - elastic_net
     restart: on-failure
     volumes:
-      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf:ro
-    command: logstash -f /usr/share/logstash/pipeline/logstash.conf
+      - ./logstash.conf:/tmp/logstash.conf
+    command: logstash -f /tmp/logstash.conf
     depends_on:
       - elasticsearch
-
-  # Using Kibana to work with logs
   kibana:
     image: docker.elastic.co/kibana/kibana-oss:6.7.1
     ports:
@@ -37,6 +33,7 @@ services:
     environment:
       SERVER_NAME: "kibana"
       ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+      TZ: Asia/Seoul
     networks:
       - elastic_net
     depends_on:
