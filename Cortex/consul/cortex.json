@@ -1,0 +1,90 @@
+{
+  "services": [
+  {
+    "name": "distributor",
+    "tags": ["cortex","distributor"],
+    "port": 8800,
+    "check": {
+      "name": "Distributor Ready",
+      "http": "http://cortex_distributor:8800/ready",
+      "interval": "5s",
+      "timeout": "2s"
+    }
+  },{
+    "name": "table-manager",
+    "tags": ["cortex","table-manager"],
+    "port": 8380,
+    "check": {
+      "name": "Table-Manager Ready",
+      "http": "http://cortex_table_manager:8380/ready",
+      "interval": "5s",
+      "timeout": "2s"
+    }
+  },{
+    "name": "query-frontend",
+    "tags": ["cortex","query-frontend"],
+    "port": 8880,
+    "check": {
+      "name": "Query-Frontend Ready",
+      "http": "http://cortex_frontend:8880/ready",
+      "interval": "5s",
+      "timeout": "2s"
+    }
+  },{ 
+    "id": "querier-1",
+    "name": "querier",
+    "tags": ["cortex","querier"],
+    "port": 11221,
+    "check": {
+      "name": "Querier Ready",
+      "http": "http://cortex_querier-1:11221/ready",
+      "interval": "5s",
+      "timeout": "2s"
+    }
+  },{
+    "id": "querier-2", 
+    "name": "querier",
+    "tags": ["cortex","querier"],
+    "port": 11222,
+    "check": {
+      "name": "Querier Ready",
+      "http": "http://cortex_querier-2:11222/ready",
+      "interval": "5s",
+      "timeout": "2s"
+    }
+  },{
+    "id": "ingester-1",
+    "name": "ingester",
+    "tags": ["cortex","ingester"],
+    "port": 13100,
+    "check": {
+      "name": "Ingester Ready",
+      "http": "http://cortex_ingester-1:13100/ready",
+      "interval": "5s",
+      "timeout": "2s"
+    }
+  },{
+    "id": "ingester-2",
+    "name": "ingester",
+    "tags": ["cortex","ingester"],
+    "port": 13200,
+    "check": {
+      "name": "Ingester Ready",
+      "http": "http://cortex_ingester-2:13200/ready",
+      "interval": "5s",
+      "timeout": "2s"
+    }
+  },{
+    "id": "ingester-3",
+    "name": "ingester",
+    "tags": ["cortex","ingester"],
+    "port": 13300,
+    "check": {
+      "name": "Ingester Ready",
+      "http": "http://cortex_ingester-3:13300/ready",
+      "interval": "5s",
+      "timeout": "2s"
+    }
+  }
+]
+}

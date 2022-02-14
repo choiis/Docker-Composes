@@ -2,6 +2,20 @@ version: '3.3'
 networks:
   msa-cortex:
 services:
+  consul-server:
+    image: consul:latest
+    restart: always
+    ports:
+      - "8600:8600/udp"
+      - "8500:8500"
+      - "8300:8300"
+      - "8301:8301"
+      - "8302:8302"
+    volumes:
+      - "./consul/:/opt/"
+    command: "agent -server -bootstrap -ui -config-dir=/opt/"
+    networks:
+      - msa-cortex
   chunk_cassandra:
     image: cassandra:3.11.6 
     restart: always

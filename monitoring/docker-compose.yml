@@ -1,8 +1,15 @@
-version: "3"
+version: "3.3"
+
+volumes:
+  grafana_data:
+  prometheus_data:
+
+networks:
+  monitor-system:
 
 services:
   prometheus:
-    image: prom/prometheus:v2.9.2
+    image: prom/prometheus:v2.33.1
     ports:
       - "9090:9090"
     networks:
@@ -14,7 +21,6 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
 
   grafana:
-    #image: grafana/grafana:6.1.6
     image: grafana/grafana:8.0.2
     networks:
       - monitor-system
@@ -24,10 +30,3 @@ services:
         - "3000:3000"
     volumes:
         - grafana_data:/var/lib/grafana
-
-volumes:
-  grafana_data:
-  prometheus_data:
-
-networks:
-  monitor-system:

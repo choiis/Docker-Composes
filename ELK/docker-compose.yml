@@ -1,5 +1,9 @@
 version: "3.3"
 
+networks:
+  elastic_net:
+    driver: bridge
+
 services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.7.1
@@ -36,11 +40,6 @@ services:
       TZ: Asia/Seoul
     networks:
       - elastic_net
+    restart: on-failure
     depends_on:
       - elasticsearch
-volumes:
-  esdata:
-    
-networks:
-  elastic_net:
-    driver: bridge
