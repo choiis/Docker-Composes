@@ -1,9 +1,5 @@
 version: "3.3"
 
-volumes:
-  grafana_data:
-  prometheus_data:
-
 networks:
   monitor-system:
 
@@ -15,7 +11,6 @@ services:
     networks:
       - monitor-system
     volumes:
-      - prometheus_data:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -29,4 +24,4 @@ services:
     ports:
         - "3000:3000"
     volumes:
-        - grafana_data:/var/lib/grafana
+        - "./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
