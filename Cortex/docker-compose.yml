@@ -25,7 +25,7 @@ services:
     networks:
       - msa-cortex
   cortex_table_manager:
-    image: ubuntu/cortex:1.10-21.10_beta   
+    image: cortexproject/cortex:v1.10.0   
     restart: on-failure
     ports:
       - "8380:8380"
@@ -41,7 +41,7 @@ services:
     depends_on:
         - chunk_cassandra
   cortex_distributor:
-    image: ubuntu/cortex:1.10-21.10_beta   
+    image: cortexproject/cortex:v1.10.0   
     restart: on-failure
     ports:
       - "8800:8800"
@@ -55,7 +55,7 @@ services:
     networks:
       - msa-cortex
   cortex_ingester-1:
-    image: ubuntu/cortex:1.10-21.10_beta   
+    image: cortexproject/cortex:v1.10.0   
     restart: on-failure
     ports:
       - "13100:13100"
@@ -74,7 +74,7 @@ services:
         - cortex_distributor
         - cortex_table_manager
   cortex_ingester-2:
-    image: ubuntu/cortex:1.10-21.10_beta   
+    image: cortexproject/cortex:v1.10.0   
     restart: on-failure
     ports:
       - "13200:13200"
@@ -93,7 +93,7 @@ services:
         - cortex_distributor
         - cortex_table_manager
   cortex_ingester-3:
-    image: ubuntu/cortex:1.10-21.10_beta   
+    image: cortexproject/cortex:v1.10.0   
     restart: on-failure
     ports:
       - "13300:13300"
@@ -112,7 +112,7 @@ services:
         - cortex_distributor
         - cortex_table_manager
   cortex_frontend:
-    image: ubuntu/cortex:1.10-21.10_beta   
+    image: cortexproject/cortex:v1.10.0   
     restart: on-failure
     ports:
       - "8880:8880"
@@ -129,7 +129,7 @@ services:
         - cortex_table_manager
         - chunk_cassandra
   cortex_querier-1:
-    image: ubuntu/cortex:1.10-21.10_beta   
+    image: cortexproject/cortex:v1.10.0   
     restart: on-failure
     ports:
       - "11221:11221"
@@ -147,7 +147,7 @@ services:
         - chunk_cassandra
         - cortex_frontend
   cortex_querier-2:
-    image: ubuntu/cortex:1.10-21.10_beta   
+    image: cortexproject/cortex:v1.10.0   
     restart: on-failure
     ports:
       - "11222:11222"
