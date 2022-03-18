@@ -1,27 +1,27 @@
 # Dockers
 
-## 개발 환경 구축을 간편하게 해주는 Docker compose파일 모음입니다
+## This is a collection of Docker compose files that make it easy to build a development environment.
 
 ### Cortex
-* CNCF프로젝트 Prometheus기반 오픈소스 지표수집 솔루션의 MSA 구축 환경 입니다
+* This is the MSA implementation environment of the CNCF project Prometheus-based open source index collection solution.
 
 ### ELK
-* ElasticSearch Kibana Logstash 구축 환경 입니다
+* ElasticSearch Kibana Logstash deployment environment
 
 ### jaeger_msa_cassandra
-* Jaeger collector query agent Cassandra 구축 환경 입니다
+* Jaeger collector query agent Cassandra implementation environment
 
 ### jaeger_msa_kafka
-* Jaeger collector query agent ingester Kafka Cassandra 구축 환경 입니다
+* Jaeger collector query agent iningester Kafka Cassandra implementation environment
 
-### kafka
-* kafka zookeeper kafka_ui 구축 환경 입니다
+###
+* This is the kafka zookeeper kafka_ui build environment.
 
-### monitoring
-* prometheus grafana 구축 환경 입니다
+###
+* This is the prometheus grafana build environment.
 
 ### mysql
-* mysql DB 구축 환경 입니다
+* This is mysql DB construction environment
 
 ### redis
-* redis DB 구축 환경 입니다
+* This is a redis DB construction environment.
