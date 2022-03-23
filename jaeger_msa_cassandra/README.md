@@ -1,17 +1,17 @@
 # Jaeger Docker
 
-## 실행 & 사용법
+## Execution & Usage
 
 ```
 docker-compose up
 ```
 
-### UI 확인
-* localhost의 16686로 UI를 확인할 수 있습니다
+### UI Usage
+* You can check the UI with http://localhost:16686
 
 ### Zipkin API
-* 9411포트로 Zipkin API호출로 Trace수집이 가능합니다
+* Trace collection is possible by calling Zipkin API through port 9411
 
-### UDP Trace 수집
-* 6831포트로 UDP Trace수집이 가능합니다
+### UDP Trace Collection
+* It is possible to collect UDP trace through 6831 port
 

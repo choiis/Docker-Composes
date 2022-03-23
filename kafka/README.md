@@ -1,17 +1,17 @@
 # Kafka Docker
 
-## 실행 & 사용법
+## Execution & Usage
 
 ```
 docker-compose up
 ```
 
-* kafka 접속
-localhost의 29092포트로 produce consume 하면 됩니다
+* kafka access
+You can produce and consume on port 29092 of localhost.
 
-* 토픽 확인
+* Topic check
 ```
 ./kafka-topics.sh --bootstrap-server=127.0.0.1:29092 --list 
 ```
 
-* http://localhost:8080/ 에서 kafka ui 사용 할수 있습니다
+* You can use kafka ui at http://localhost:8080/
