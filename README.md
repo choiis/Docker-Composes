@@ -11,9 +11,6 @@
 ### jaeger_msa_cassandra
 * Jaeger collector query agent Cassandra implementation environment
 
-### jaeger_msa_kafka
-* Jaeger collector query agent iningester Kafka Cassandra implementation environment
-
 ###
 * This is the kafka zookeeper kafka_ui build environment.
 
