@@ -1,0 +1,46 @@
+version: "3.3"
+
+services:
+  cassandra0:
+    image: cassandra:3.9
+    ports:
+      - "9042:9042"
+    environment:
+      - "CASSANDRA_SEEDS=cassandra0"
+      - "CASSANDRA_CLUSTER_NAME=cassandra-cluster"
+      - "CASSANDRA_DC=dc1"
+      - "CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch"
+    restart: unless-stopped
+    volumes:
+      - "cassandra_data_0:/var/lib/cassandra"
+
+  cassandra1:
+    image: cassandra:3.9
+    environment:
+      - "CASSANDRA_SEEDS=cassandra0"
+      - "CASSANDRA_CLUSTER_NAME=cassandra-cluster"
+      - "CASSANDRA_DC=dc1"
+      - "CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch"
+    depends_on:
+      - cassandra0
+    restart: unless-stopped
+    volumes:
+      - "cassandra_data_1:/var/lib/cassandra"
+
+  cassandra2:
+    image: cassandra:3.9
+    environment:
+      - "CASSANDRA_SEEDS=cassandra0"
+      - "CASSANDRA_CLUSTER_NAME=cassandra-cluster"
+      - "CASSANDRA_DC=dc1"
+      - "CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch"
+    depends_on:
+      - cassandra0
+    restart: unless-stopped
+    volumes:
+      - "cassandra_data_2:/var/lib/cassandra"
+
+volumes:
+  cassandra_data_0:
+  cassandra_data_1:
+  cassandra_data_2:

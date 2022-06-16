@@ -2,6 +2,9 @@
 
 ## This is a collection of Docker compose files that make it easy to build a development environment.
 
+### Cassandra
+* Cassandra DB Cluster made with multiple nodes environment
+
 ### ELK
 * ElasticSearch Kibana Logstash deployment environment
 

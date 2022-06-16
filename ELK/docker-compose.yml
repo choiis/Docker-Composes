@@ -1,45 +1,101 @@
-version: "3.3"
-
-networks:
-  elastic_net:
-    driver: bridge
+version: '3'
 
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.7.1
-    networks:
-      - elastic_net
+  elasticsearch-master:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    restart: on-failure
+    environment:   
+      - cluster.name=es-cluster
+      - node.name=elasticsearch-master
+      - discovery.seed_hosts=elasticsearch-data-1,elasticsearch-data-2
+      - cluster.initial_master_nodes=elasticsearch-master
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "node.master=true"
+      - "node.data=false"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
     ports:
       - "9200:9200"
       - "9300:9300"
+    networks:
+      - elastic
+    volumes:
+      - es-data1:/usr/share/elasticsearch/data
+  elasticsearch-data-1:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
     restart: on-failure
     environment:
-      ES_JAVA_OPTS: "-Xms512m -Xmx512m"
-      TZ: Asia/Seoul
+      - cluster.name=es-cluster
+      - node.name=elasticsearch-data-1
+      - discovery.seed_hosts=elasticsearch-master,elasticsearch-data-2
+      - cluster.initial_master_nodes=elasticsearch-master
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "node.master=false"
+      - "node.data=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      - elastic
+    volumes:
+      - es-data2:/usr/share/elasticsearch/data
+  elasticsearch-data-2:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    restart: on-failure
+    environment:
+      - cluster.name=es-cluster
+      - node.name=elasticsearch-data-2
+      - discovery.seed_hosts=elasticsearch-master,elasticsearch-data-1
+      - cluster.initial_master_nodes=elasticsearch-master
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "node.master=false"
+      - "node.data=true"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    networks:
+      - elastic
+    volumes:
+      - es-data3:/usr/share/elasticsearch/data
+  kibana:
+    image: docker.elastic.co/kibana/kibana-oss:7.7.1
+    restart: on-failure
+    ports:
+      - "5601:5601"
+    environment:
+      SERVER_NAME: "kibana"
+      ELASTICSEARCH_HOSTS: "http://elasticsearch-master:9200"
+    depends_on:
+      - elasticsearch-master
+    networks:
+      - elastic
   logstash:
-    image: docker.elastic.co/logstash/logstash-oss:6.7.1
+    image: docker.elastic.co/logstash/logstash-oss:7.7.1
     ports:
       - "5000:5000"
     environment:
       TZ: Asia/Seoul
     networks:
-      - elastic_net
+      - elastic
     restart: on-failure
     volumes:
       - ./logstash.conf:/tmp/logstash.conf
     command: logstash -f /tmp/logstash.conf
     depends_on:
-      - elasticsearch
-  kibana:
-    image: docker.elastic.co/kibana/kibana-oss:6.7.1
-    ports:
-      - "5601:5601"
-    environment:
-      SERVER_NAME: "kibana"
-      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
-      TZ: Asia/Seoul
-    networks:
-      - elastic_net
-    restart: on-failure
-    depends_on:
-      - elasticsearch
+      - elasticsearch-master
+
+networks:
+  elastic:
+    driver: bridge
+
+volumes:
+  es-data1:
+    driver: local
+  es-data2:
+    driver: local
+  es-data3:
+    driver: local

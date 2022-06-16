@@ -1,13 +1,16 @@
 # ELK Docker
-* elastic search + kibana + logstash environment
+* elasticsearch + kibana + logstash environment
+* elasticsearch cluster made with 3 nodes.
+* Before running docker container, increase docker memory limit to 4 GB or more.
 
 ## Execution & Usage
 ```
 docker-compose up 
 ```
 
-### elastic search check
+### elasticsearch check
 * You can access it on port 9200 of localhost.
+* You can see cluster and node information at http://localhost:9200/_cluster/health?pretty
 
 ### kibana
 * You can use kibana ui at http://localhost:5601/
