@@ -61,6 +61,17 @@ services:
       - elastic
     volumes:
       - es-data3:/usr/share/elasticsearch/data
+  elasticsearch_exporter:
+    image: quay.io/prometheuscommunity/elasticsearch-exporter:v1.3.0
+    command:
+      - '--es.uri=http:/elasticsearch-master:9200'
+    restart: always
+    depends_on:
+      - elasticsearch-master
+    ports:
+      - "9114:9114"
+    networks:
+      - elastic
   kibana:
     image: docker.elastic.co/kibana/kibana-oss:7.7.1
     restart: on-failure
