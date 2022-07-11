@@ -1,5 +1,9 @@
 version: "3.3"
 
+volumes:
+  grafana_data:
+  prometheus_data:
+
 networks:
   monitor-system:
 
@@ -11,7 +15,9 @@ services:
     networks:
       - monitor-system
     volumes:
+      - prometheus_data:/prometheus
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./alert_rules.yml:/etc/prometheus/alert_rules.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
 
@@ -20,8 +26,23 @@ services:
     networks:
       - monitor-system
     depends_on:
-        - prometheus
+      - prometheus
     ports:
-        - "3000:3000"
+      - "3000:3000"
     volumes:
-        - "./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
+      - grafana_data:/var/lib/grafana
+      - "./datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml"
+
+  alertmanager:
+    image: prom/alertmanager:v0.23.0
+    networks:
+      - monitor-system
+    depends_on:
+      - prometheus
+    ports: 
+      - "9093:9093"
+    volumes:      
+      - "./alertmanager.yml:/etc/alertmanager/alertmanager.yml"
+    restart: always
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'

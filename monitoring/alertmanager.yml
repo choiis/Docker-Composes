@@ -1,0 +1,17 @@
+global:
+  resolve_timeout: 1m
+
+route:
+  receiver: 'naver-notifications'
+
+receivers:
+- name: 'naver-notifications'
+  email_configs:
+  - to: youraccount@gmail.com
+    from: youraccount@naver.com
+    smarthost: smtp.naver.com:587
+    auth_username: youraccount@naver.com
+    auth_identity: youraccount@naver.com
+    auth_password: yourpassword
+    require_tls: true
+    send_resolved: true

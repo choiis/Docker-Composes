@@ -1,0 +1,12 @@
+groups:
+- name: alert
+  rules: 
+  - alert: Memory
+    expr: process_virtual_memory_bytes > 10
+    for: 5s
+    labels: 
+       severity: warning
+    annotations:
+      summary: High Memory Usage on {{ $labels.instance }}
+      dentifier: "{{ $labels.instance }}"
+      description: "{{ $labels.job }} Memory Usage: {{ $value }}"

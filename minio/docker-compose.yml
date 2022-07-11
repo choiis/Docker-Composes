@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  minio:
+    image: minio/minio:RELEASE.2021-07-15T22-27-34Z
+    command: server /data --console-address ":9001"
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+  createbuckets:
+    image: minio/mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/mc-storage-bucket;
+      /usr/bin/mc policy set public myminio/mc-storage-bucket;
+      exit 0;"

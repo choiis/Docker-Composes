@@ -12,3 +12,12 @@ scrape_configs:
     scrape_interval: 10s
     static_configs:
     - targets: ['localhost:9090']
+
+rule_files:
+  - "/etc/prometheus/alert_rules.yml"
+
+alerting:
+  alertmanagers:
+    - static_configs:
+       - targets:
+          - alertmanager:9093
