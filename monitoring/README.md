@@ -20,5 +20,5 @@ docker-compose up
 
 ### alertmanager
 * You can use alert manager ui at http://localhost:9093/
-* If alert manager get alert call from prometheus, Then It send email to user
+* If alert manager gets alert call from prometheus, Then it sends email to user
 ![Alert](http://imageresizer-dev-serverlessdeploymentbucket-xapz1q6q9exe.s3-website-ap-northeast-1.amazonaws.com/gitpng/alert.PNG)

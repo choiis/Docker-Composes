@@ -13,4 +13,4 @@ docker-compose up
 * You can access S3 with your aws secret key and accesskey minioadmin.
 
 ### minio/mc
-* minio/mc make mc-storage-bucket bucket and let it public
+* minio/mc makes mc-storage-bucket bucket and lets it public
